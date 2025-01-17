@@ -78,6 +78,7 @@ const transactionRoutes=require('./routes/transactions.js');
 const cartRoutes=require('./routes/cart.js');
 const paypalRoutes=require('./routes/paypal.js')
 const orderRoutes=require('./routes/orders.js');
+const adminRoutes=require('./routes/admin.js');
 
 app.use('/auth',authRoutes);
 
@@ -92,3 +93,5 @@ app.use('/cart',cartRoutes);
 app.use('/paypal',paypalRoutes);
 
 app.use('/orders',orderRoutes);
+
+app.use('/admin',adminRoutes);
