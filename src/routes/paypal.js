@@ -35,6 +35,21 @@ router.post('/create-order',async(req,res)=>{
 })
 
 
+const createNotification = async (userId, message) => {
+    try {
+        await pool.query(
+            'INSERT INTO notifications (user_id, message) VALUES ($1, $2)',
+            [userId, message]
+        );
+
+        // Emit notification to the specific user via WebSocket
+        const io = req.app.get('io');
+        io.emit(`notification:${userId}`, { message });
+    } catch (error) {
+        console.error('Error creating notification:', error);
+    }
+};
+
 // Capture and Create Order with PayPal Payment
 router.post('/capture-order', async (req, res) => {
     const { orderId } = req.body; // PayPal order ID
@@ -85,6 +100,8 @@ router.post('/capture-order', async (req, res) => {
             await Promise.all([...orderItemsPromises, ...stockUpdatePromises]);
 
             await client.query('COMMIT');  // Commit the transaction
+
+            await createNotification(userId, 'Your payment was successful!');
 
             res.status(201).json({
                 message: 'Payment captured successfully, order created!',
