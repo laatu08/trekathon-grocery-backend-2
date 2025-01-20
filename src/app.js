@@ -96,6 +96,7 @@ const paypalRoutes=require('./routes/paypal.js')
 const orderRoutes=require('./routes/orders.js');
 const adminRoutes=require('./routes/admin.js');
 const notifyRoutes=require('./routes/notify.js');
+const vendorRoutes=require('./routes/vendors.js');
 
 app.use('/auth',authRoutes);
 
@@ -114,3 +115,5 @@ app.use('/orders',orderRoutes);
 app.use('/admin',adminRoutes);
 
 app.use('/notification',notifyRoutes);
+
+app.use('/vendor',vendorRoutes);
