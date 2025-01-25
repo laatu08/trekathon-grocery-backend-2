@@ -65,7 +65,7 @@ router.post('/capture-order', async (req, res) => {
         const capture = await client.execute(request);
 
         // Store order details in the database after successful capture
-        const { id, status, payer } = capture.result;
+        const { id, status } = capture.result;
 
         // Begin transaction to insert order and order items in the database
         const client = await pool.connect();
@@ -74,8 +74,8 @@ router.post('/capture-order', async (req, res) => {
 
             // Insert the order into the `orders` table
             const orderResult = await client.query(
-                'INSERT INTO orders (customer_id, total_amount, paypal_order_id, status, payer_email) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-                [userId, totalAmount, id, status, payer.email]
+                'INSERT INTO orders (customer_id, total_amount, paypal_order_id, status) VALUES ($1, $2, $3, $4) RETURNING id',
+                [userId, totalAmount, id, status]
             );
 
             const orderIdDb = orderResult.rows[0].id;
